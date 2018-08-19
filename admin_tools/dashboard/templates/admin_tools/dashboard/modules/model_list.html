@@ -5,11 +5,17 @@
             {% for child in module.children %}
             {% spaceless %}
             <li>
-                {% if child.change_url %}<a href="{{ child.change_url }}">{{ child.title|capfirst }}</a>{% else %}{{ child.title|capfirst }}{% endif %}
-                {% if child.add_url or child.change_url %}
+                {% if child.admin_url %}<a href="{{ child.admin_url }}">{{ child.title|capfirst }}</a>{% else %}{{ child.title|capfirst }}{% endif %}
+                {% if child.add_url or child.admin_url %}
                 <ul>
-                    {% if child.add_url %}<li><a class="addlink" href="{{ child.add_url }}"><span class="icon">{% trans "Add" %}</span></a></li>{% endif %}
-                    {% if child.change_url %}<li><a class="changelink" href="{{ child.change_url }}"><span class="icon">{% trans "Change" %}</span></a></li>{% endif %}
+                    {% if model.add_url %}<li><a class="addlink" href="{{ model.add_url }}"><span class="icon">{% trans "Add" %}</span></a></li>{% endif %}
+                    {% if model.admin_url %}
+                        {% if model.view_only %}
+                            <li><a class="viewlink" href="{{ model.admin_url }}"><span class="icon">{% trans "View" %}</span></a></li>
+                        {% else %}
+                            <li><a class="changelink" href="{{ model.admin_url }}"><span class="icon">{% trans "Change" %}</span></a></li>
+                        {% endif %}
+                    {% endif %}
                 </ul>
                 {% endif %}
             </li>

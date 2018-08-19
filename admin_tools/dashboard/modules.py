@@ -456,13 +456,18 @@ class AppList(DashboardModule, AppListElementMixin):
                 }
             model_dict = {}
             model_dict['title'] = model._meta.verbose_name_plural
-            if perms['change']:
-                model_dict['change_url'] = self._get_admin_change_url(
+            if perms.get('view', False) or perms['change']:
+                model_dict['admin_url'] = self._get_admin_change_url(
                     model,
                     context
                 )
             if perms['add']:
                 model_dict['add_url'] = self._get_admin_add_url(model, context)
+            if 'admin_url' in model_dict:
+                if not perms['change'] and perms.get('view', False):
+                    model_dict['view_only'] = True
+                else:
+                    model_dict['view_only'] = False
             apps[app_label]['models'].append(model_dict)
 
         for app in sorted(apps.keys()):
@@ -542,21 +547,28 @@ class ModelList(DashboardModule, AppListElementMixin):
         for model, perms in items:
             model_dict = {}
             model_dict['title'] = model._meta.verbose_name_plural
-            if perms['change']:
-                model_dict['change_url'] = self._get_admin_change_url(
+            if perms.get('view', False) or perms['change']:
+                model_dict['admin_url'] = self._get_admin_change_url(
                     model,
                     context
                 )
             if perms['add']:
                 model_dict['add_url'] = self._get_admin_add_url(model, context)
+            if 'admin_url' in model_dict:
+                if not perms['change'] and perms.get('view', False):
+                    model_dict['view_only'] = True
+                else:
+                    model_dict['view_only'] = False
             self.children.append(model_dict)
         if self.extra:
             # TODO - permissions support
             for extra_url in self.extra:
                 model_dict = {}
                 model_dict['title'] = extra_url['title']
-                model_dict['change_url'] = extra_url['change_url']
+                model_dict['admin_url'] = extra_url['change_url']
+                model_dict['admin_url'] = extra_url['admin_url']
                 model_dict['add_url'] = extra_url.get('add_url', None)
+                model_dict['view_only'] = extra_url.get('view_only', None)
                 self.children.append(model_dict)
 
         self._initialized = True

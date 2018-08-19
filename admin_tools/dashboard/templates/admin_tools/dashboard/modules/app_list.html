@@ -7,11 +7,17 @@
             {% for model in child.models %}
             {% spaceless %}
             <li>
-                {% if model.change_url %}<a href="{{ model.change_url }}">{{ model.title|capfirst }}</a>{% else %}{{ model.title|capfirst }}{% endif %}
-                {% if model.add_url or model.change_url %}
+                {% if model.admin_url %}<a href="{{ model.admin_url }}">{{ model.title|capfirst }}</a>{% else %}{{ model.title|capfirst }}{% endif %}
+                {% if model.add_url or model.admin_url %}
                 <ul>
                     {% if model.add_url %}<li><a class="addlink" href="{{ model.add_url }}"><span class="icon">{% trans "Add" %}</span></a></li>{% endif %}
-                    {% if model.change_url %}<li><a class="changelink" href="{{ model.change_url }}"><span class="icon">{% trans "Change" %}</span></a></li>{% endif %}
+                    {% if model.admin_url %}
+                        {% if model.view_only %}
+                            <li><a class="viewlink" href="{{ model.admin_url }}"><span class="icon">{% trans "View" %}</span></a></li>
+                        {% else %}
+                            <li><a class="changelink" href="{{ model.admin_url }}"><span class="icon">{% trans "Change" %}</span></a></li>
+                        {% endif %}
+                    {% endif %}
                 </ul>
                 {% endif %}
             </li>
