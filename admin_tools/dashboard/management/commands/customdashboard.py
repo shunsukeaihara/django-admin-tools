@@ -9,6 +9,7 @@ class Command(BaseCommand):
     help = ('Creates a template file containing the base code to get you '
             'started with your custom dashboard.')
     args = '[file]'
+    stealth_options = ('file',)
     label = 'application name'
 
     def handle(self, file=None, **options):

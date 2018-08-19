@@ -10,6 +10,7 @@ class Command(BaseCommand):
     help = ('Creates a template file containing the base code to get you '
             'started with your custom menu')
     args = ['file']
+    stealth_options = ('file',)
 
     def handle(self, file=None, **options):
         project_name = os.path.basename(os.getcwd())
